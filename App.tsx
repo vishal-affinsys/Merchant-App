@@ -4,6 +4,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LoginScreen from './src/screens/LoginScreen';
 import DashBoard from './src/screens/DashBoard';
 import SplashScreen from './src/screens/Splash';
+import {Provider} from 'react-redux';
+import {store} from './src/store/store';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,9 +21,11 @@ const RootNavigator = (): JSX.Element => {
 
 function App(): JSX.Element {
   return (
-    <NavigationContainer>
-      <RootNavigator />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <RootNavigator />
+      </NavigationContainer>
+    </Provider>
   );
 }
 

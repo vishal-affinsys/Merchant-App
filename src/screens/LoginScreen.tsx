@@ -1,29 +1,83 @@
-import {useNavigation} from '@react-navigation/native';
+import {
+  ParamListBase,
+  useNavigation,
+  NavigationProp,
+} from '@react-navigation/native';
+import {SerializedError} from '@reduxjs/toolkit';
+import {FetchBaseQueryError} from '@reduxjs/toolkit/dist/query';
 import React from 'react';
 import {View, StyleSheet, Image, StatusBar} from 'react-native';
 import {Text, TextInput, Button, HelperText} from 'react-native-paper';
 import Spacer from '../components/Spacer';
-import {LoginUser} from '../helpers/UserLogin';
+import {useGetCodeMutation, useGetTokenMutation} from '../store/LoginApi';
+
+export interface CodeResponse {
+  code: string;
+}
+
+export interface TokenResponse {
+  token: string;
+  user_id: string;
+}
 
 function LoginScreen(): JSX.Element {
-  const [isSecure, setSecure] = React.useState<boolean>(true);
+  const [getCode] = useGetCodeMutation();
+  const [getToken] = useGetTokenMutation();
+  const {reset} = useNavigation<NavigationProp<ParamListBase>>();
 
-  const {reset} = useNavigation();
+  const [state, setState] = React.useState({
+    username: {
+      value: 'Prerna_Agarwal',
+      isError: false,
+    },
+    password: {
+      value: 'Kingkong$1',
+      isError: false,
+      isSecure: true,
+    },
+  });
 
-  const username = React.useRef<string>('Prerna_Agarwal');
-  const password = React.useRef<string>('Kingkong$1');
+  function setUsername(text: string): void {
+    setState({
+      ...state,
+      username: {value: text, isError: text.length < 3},
+    });
+  }
 
-  const [isError, setError] = React.useState<{
-    username: boolean;
-    password: boolean;
-  }>({username: false, password: false});
+  function setPassword(text: string): void {
+    setState({
+      ...state,
+      password: {value: text, isError: text.length < 6, isSecure: true},
+    });
+  }
+
+  function setSecure(visibility: boolean): void {
+    setState({
+      ...state,
+      password: {...state.password, isSecure: visibility},
+    });
+  }
+
+  function getTokenAndSetCookies(
+    data: {data: CodeResponse} | {error: FetchBaseQueryError | SerializedError},
+  ): void {
+    if ('data' in data) {
+      getToken(data.data).then(() => {
+        reset({
+          routes: [{name: 'Dashboard'}],
+        });
+      });
+    }
+  }
 
   function handleSubmit(): void {
-    setError({
-      password: username.current.length < 6,
-      username: password.current.length < 3,
-    });
-    LoginUser(reset);
+    const payload = {
+      username: state.username.value,
+      password: state.password.value,
+    };
+    if (!state.password.isError && !state.username.isError) {
+      getCode(payload).then(getTokenAndSetCookies);
+    }
   }
 
   return (
@@ -49,13 +103,11 @@ function LoginScreen(): JSX.Element {
         underlineColor={'transparent'}
         activeUnderlineColor={'grey'}
         style={style.inputStyle}
-        onChangeText={(text: string): void => {
-          username.current = text;
-        }}
-        value={username.current}
+        onChangeText={setUsername}
+        value={state.username.value}
         left={<TextInput.Icon icon={'account'} size={25} />}
       />
-      <HelperText type="error" visible={isError.username}>
+      <HelperText type="error" visible={state.username.isError}>
         Length of username must be greater than 2
       </HelperText>
       <Spacer margin={1} />
@@ -63,13 +115,13 @@ function LoginScreen(): JSX.Element {
       {/* -------------------password field------------------ */}
       <TextInput
         label={'password'}
-        secureTextEntry={isSecure}
+        secureTextEntry={state.password.isSecure}
         activeUnderlineColor={'grey'}
         style={style.inputStyle}
         onChangeText={(text: string): void => {
-          password.current = text;
+          setPassword(text);
         }}
-        value={password.current}
+        value={state.password.value}
         underlineColor={'transparent'}
         left={<TextInput.Icon icon={'key'} size={25} />}
         right={
@@ -77,12 +129,12 @@ function LoginScreen(): JSX.Element {
             icon={'eye'}
             size={25}
             onPress={(): void => {
-              setSecure(!isSecure);
+              setSecure(!state.password.isSecure);
             }}
           />
         }
       />
-      <HelperText type="error" visible={isError.password}>
+      <HelperText type="error" visible={state.password.isError}>
         Length of password must be greater than or equal to 6
       </HelperText>
       <Spacer margin={6} />

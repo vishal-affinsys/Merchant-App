@@ -9,6 +9,7 @@ import {
 import {WebView, WebViewMessageEvent} from 'react-native-webview';
 import CookieManager, {Cookies} from '@react-native-cookies/cookies';
 import {customStyles} from '../constants/Styles';
+import {WebViewErrorEvent} from 'react-native-webview/lib/WebViewTypes';
 
 const DashBoard = (): JSX.Element => {
   const webViewRef = React.useRef<WebView>(null);
@@ -16,12 +17,12 @@ const DashBoard = (): JSX.Element => {
   const onAndroidBackPress = (): boolean => {
     if (webViewRef.current) {
       webViewRef?.current?.goBack();
-      return true; // prevent default behavior (exit DashBoard)
+      return true;
     }
     return false;
   };
 
-  React.useEffect(() => {
+  React.useEffect((): (() => void) | undefined => {
     if (Platform.OS === 'android') {
       CookieManager.get('https://dev.studio.bankbuddy.me/').then(
         (data: Cookies): void => {
@@ -62,7 +63,7 @@ const DashBoard = (): JSX.Element => {
         allowFileAccess={true}
         scalesPageToFit={true}
         sharedCookiesEnabled={true}
-        onError={syntheticEvent => {
+        onError={(syntheticEvent: WebViewErrorEvent): void => {
           const {nativeEvent} = syntheticEvent;
           console.warn('WebView error: ', nativeEvent);
         }}
