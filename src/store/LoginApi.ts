@@ -15,8 +15,6 @@ export const LoginApi = createApi({
         url: endpoints.getCode,
         body: payload,
         method: 'POST',
-        mode: 'cors',
-        credentials: 'omit',
       }),
     }),
     getToken: builder.mutation({
@@ -24,8 +22,6 @@ export const LoginApi = createApi({
         url: endpoints.getToken,
         body: payload,
         method: 'POST',
-        mode: 'cors',
-        credentials: 'omit',
       }),
       async onCacheEntryAdded(args, {cacheDataLoaded}): Promise<void> {
         try {

@@ -7,9 +7,9 @@ import {SerializedError} from '@reduxjs/toolkit';
 import {FetchBaseQueryError} from '@reduxjs/toolkit/dist/query';
 import React from 'react';
 import {View, StyleSheet, Image, StatusBar} from 'react-native';
-import {Text, TextInput, Button, HelperText} from 'react-native-paper';
-import Spacer from '../components/Spacer';
+import {Text, TextInput, Button} from 'react-native-paper';
 import {useGetCodeMutation, useGetTokenMutation} from '../store/LoginApi';
+import ErrorText from '../components/ErrorText';
 
 export interface CodeResponse {
   code: string;
@@ -107,10 +107,10 @@ function LoginScreen(): JSX.Element {
         value={state.username.value}
         left={<TextInput.Icon icon={'account'} size={25} />}
       />
-      <HelperText type="error" visible={state.username.isError}>
-        Length of username must be greater than 2
-      </HelperText>
-      <Spacer margin={1} />
+      <ErrorText
+        message="Length of username must be greater than 2"
+        visibile={state.username.isError}
+      />
 
       {/* -------------------password field------------------ */}
       <TextInput
@@ -134,10 +134,10 @@ function LoginScreen(): JSX.Element {
           />
         }
       />
-      <HelperText type="error" visible={state.password.isError}>
-        Length of password must be greater than or equal to 6
-      </HelperText>
-      <Spacer margin={6} />
+      <ErrorText
+        message="Length of password must be greater than or equal to 6"
+        visibile={state.password.isError}
+      />
 
       {/* --------------Submit button----------------- */}
       <Button
