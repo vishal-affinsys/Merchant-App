@@ -1,8 +1,6 @@
-// api=https://api.datamuse.com/words?ml=sunset
-
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {BASE_URL, endpoints} from '../helpers/UserLogin';
-import CookieManager, {Cookie} from '@react-native-cookies/cookies';
+import {setCookies} from '../helpers/CookieManager';
 
 export const LoginApi = createApi({
   reducerPath: 'loginApi',
@@ -26,20 +24,8 @@ export const LoginApi = createApi({
       async onCacheEntryAdded(args, {cacheDataLoaded}): Promise<void> {
         try {
           const {data, meta} = await cacheDataLoaded;
-          console.log('OnCacheEntry:', data);
           if (meta?.response?.status === 200) {
-            const values: Cookie = {
-              domain: 'dev.studio.bankbuddy.me',
-              name: 'auth_token',
-              httpOnly: false,
-              value: data.token,
-              path: '/',
-              expires: new Date(
-                new Date().getTime() + 60 * 60 * 24 * 1000,
-              ).toDateString(),
-              secure: true,
-            };
-            CookieManager.set(BASE_URL, values);
+            setCookies(data);
           }
         } catch (e) {
           console.log(e);
@@ -49,6 +35,4 @@ export const LoginApi = createApi({
   }),
 });
 
-// Export hooks for usage in functional components, which are
-// auto-generated based on the defined endpoints
 export const {useGetCodeMutation, useGetTokenMutation} = LoginApi;

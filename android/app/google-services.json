@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "505563192580",
+    "project_id": "merchant-308a5",
+    "storage_bucket": "merchant-308a5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:505563192580:android:476f2102533c14c9320451",
+        "android_client_info": {
+          "package_name": "com.bankbuddym"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "505563192580-jskbjo8og0kca65i5enieha77ciimbu7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bankbuddym",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "505563192580-f9ni6m4p7m1olae9050hn7ondg77omgh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLAa2PvkMxK9qCDpv-qT_0brpP_vf_zpg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "505563192580-f9ni6m4p7m1olae9050hn7ondg77omgh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

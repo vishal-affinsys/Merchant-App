@@ -7,27 +7,26 @@ import {
   ParamListBase,
   useNavigation,
 } from '@react-navigation/native';
+import {BASE_URL} from '../helpers/UserLogin';
 
 const SplashScreen = (): JSX.Element => {
   const {reset} = useNavigation<NavigationProp<ParamListBase>>();
 
   function checkLoginStatus() {
     console.log('---Check login Status---');
-    CookieManager.get('https://dev.studio.bankbuddy.me/').then(
-      (data: Cookies): void => {
-        if (JSON.stringify(data).length === 2) {
-          reset({
-            index: 0,
-            routes: [{name: 'Login'}],
-          });
-        } else {
-          reset({
-            index: 0,
-            routes: [{name: 'Dashboard'}],
-          });
-        }
-      },
-    );
+    CookieManager.get(BASE_URL).then((data: Cookies): void => {
+      if (JSON.stringify(data).length === 2) {
+        reset({
+          index: 0,
+          routes: [{name: 'Login'}],
+        });
+      } else {
+        reset({
+          index: 0,
+          routes: [{name: 'Dashboard'}],
+        });
+      }
+    });
   }
   React.useEffect(() => {
     checkLoginStatus();

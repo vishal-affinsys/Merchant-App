@@ -7,10 +7,10 @@ import {
   StatusBar,
 } from 'react-native';
 import {WebView, WebViewMessageEvent} from 'react-native-webview';
-import CookieManager, {Cookies} from '@react-native-cookies/cookies';
 import {customStyles} from '../../constants/Styles';
 import {WebViewErrorEvent} from 'react-native-webview/lib/WebViewTypes';
 import PushNotification from 'react-native-push-notification';
+import {getCookies} from '../../helpers/CookieManager';
 
 const WebApp = (): JSX.Element => {
   const webViewRef = React.useRef<WebView>(null);
@@ -25,11 +25,7 @@ const WebApp = (): JSX.Element => {
 
   React.useEffect((): (() => void) | undefined => {
     if (Platform.OS === 'android') {
-      CookieManager.get('https://dev.studio.bankbuddy.me/').then(
-        (data: Cookies): void => {
-          console.log(data);
-        },
-      );
+      getCookies();
       BackHandler.addEventListener('hardwareBackPress', onAndroidBackPress);
       return (): void => {
         BackHandler.removeEventListener(
@@ -53,6 +49,7 @@ const WebApp = (): JSX.Element => {
         vibrate: false,
         vibration: 300,
         playSound: true,
+        usesChronometer: true,
         soundName: 'default',
       });
     }
