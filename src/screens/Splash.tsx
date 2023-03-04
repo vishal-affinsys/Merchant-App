@@ -1,5 +1,6 @@
 import React from 'react';
 import {Image, View, StyleSheet} from 'react-native';
+// Comment to push on git
 import {ActivityIndicator} from 'react-native-paper';
 import CookieManager, {Cookies} from '@react-native-cookies/cookies';
 import {
