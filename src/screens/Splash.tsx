@@ -1,5 +1,6 @@
 import React from 'react';
 import {Image, View, StyleSheet} from 'react-native';
+//splash screen added
 import {ActivityIndicator} from 'react-native-paper';
 import CookieManager, {Cookies} from '@react-native-cookies/cookies';
 import {
