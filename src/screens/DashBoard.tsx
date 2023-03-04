@@ -39,6 +39,19 @@ const DashBoard = (): JSX.Element => {
     console.log('Message from webview:', event.nativeEvent);
   }
 
+  const WebAPICode = `
+  const { fetch: originalFetch } = window;
+
+  window.fetch = async (...args) => {
+      let [resource, config ] = args;
+      // request interceptor here
+      const response = await originalFetch(resource, config);
+      await window.ReactNativeWebView.postMessage(JSON.stringify(config));
+      // response interceptor here
+      return response;
+  };
+  `;
+
   return (
     <View style={customStyles.body}>
       <StatusBar
@@ -56,6 +69,7 @@ const DashBoard = (): JSX.Element => {
         bounces={true}
         renderLoading={(): JSX.Element => <ActivityIndicator />}
         contentMode={'mobile'}
+        injectedJavaScript={WebAPICode}
         allowFileAccess={true}
         scalesPageToFit={true}
         sharedCookiesEnabled={true}

@@ -19,7 +19,7 @@ export interface TokenResponse {
 
 export const useLoginFormController = () => {
   const [getCode, code] = useGetCodeMutation();
-  const [getToken] = useGetTokenMutation();
+  const [getToken, token] = useGetTokenMutation();
   const {reset} = useNavigation<NavigationProp<ParamListBase>>();
   const [error, setError] = React.useState(code.isError);
   const [message, setMessage] = React.useState('');
@@ -87,10 +87,13 @@ export const useLoginFormController = () => {
     }
   }
 
+  const loading = code.isLoading || token.isLoading;
+
   return {
     state,
     error,
     message,
+    loading,
     handleSubmit,
     setPassword,
     setUsername,

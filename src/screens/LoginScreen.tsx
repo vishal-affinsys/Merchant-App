@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
-import {Text, TextInput, Button} from 'react-native-paper';
+import {Text, TextInput, Button, ActivityIndicator} from 'react-native-paper';
 import ErrorText from '../components/ErrorText';
 import {useLoginFormController} from '../helpers/LoginControllers';
 import SnackbarX from '../components/Snackbar';
@@ -10,6 +10,7 @@ function LoginScreen(): JSX.Element {
     state,
     error,
     message,
+    loading,
     handleSubmit,
     setPassword,
     setUsername,
@@ -83,6 +84,13 @@ function LoginScreen(): JSX.Element {
           }}>
           Submit
         </Button>
+        <View style={style.loadingContainer}>
+          {loading ? (
+            <ActivityIndicator size={20} />
+          ) : (
+            <View style={style.emptyContainer} />
+          )}
+        </View>
       </View>
     </SnackbarX>
   );
@@ -113,5 +121,11 @@ const style = StyleSheet.create({
     borderWidth: 0.5,
     overflow: 'hidden',
     borderRadius: 0,
+  },
+  loadingContainer: {
+    marginVertical: 20,
+  },
+  emptyContainer: {
+    height: 20,
   },
 });
