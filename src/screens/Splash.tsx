@@ -17,11 +17,13 @@ const SplashScreen = (): JSX.Element => {
     CookieManager.get('https://dev.studio.bankbuddy.me/').then(
       (data: Cookies): void => {
         if (JSON.stringify(data).length === 2) {
+          console.log('New user taking to login screen')
           reset({
             index: 0,
             routes: [{name: 'Login'}],
           });
         } else {
+          console.log('Already signed in taking to dashboard')
           reset({
             index: 0,
             routes: [{name: 'Dashboard'}],
@@ -31,8 +33,9 @@ const SplashScreen = (): JSX.Element => {
     );
   }
   React.useEffect(() => {
+    console.log('Login Check with status success')
     checkLoginStatus();
-  });
+  }, []);
   return (
     <View style={style.body}>
       <Image

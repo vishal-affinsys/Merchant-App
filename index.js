@@ -3,7 +3,7 @@
  */
 
 import {AppRegistry} from 'react-native';
-// import App from './App';
+import App from './App';
 import {name as appName} from './app.json';
 import WebApp from './src/screens/TestScreens/WebApp';
 import {Platform} from 'react-native';
@@ -68,5 +68,5 @@ PushNotification.createChannel(
   created => console.log(`createChannel returned '${created}'`), // (optional) callback returns whether the channel was created, false means it already existed.
 );
 
-// AppRegistry.registerComponent(appName, () => App);
-AppRegistry.registerComponent(appName, () => WebApp);
+AppRegistry.registerComponent(appName, () => App);
+// AppRegistry.registerComponent(appName, () => WebApp);
