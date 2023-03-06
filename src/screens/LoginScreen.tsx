@@ -27,11 +27,11 @@ function LoginScreen(): JSX.Element {
 
   const [state, setState] = React.useState({
     username: {
-      value: 'Prerna_Agarwal',
+      value: 'vishal',
       isError: false,
     },
     password: {
-      value: 'Kingkong$1',
+      value: 'Change@0987!',
       isError: false,
       isSecure: true,
     },

@@ -28,15 +28,17 @@ export const LoginApi = createApi({
           const {data, meta} = await cacheDataLoaded;
           console.log('OnCacheEntry:', data);
           if (meta?.response?.status === 200) {
+            const date = new Date(
+                new Date().getTime() + 60 * 60 * 24 * 1000,
+              ).toJSON();
+              console.log(date);
             const values: Cookie = {
               domain: 'dev.studio.bankbuddy.me',
               name: 'auth_token',
               httpOnly: false,
               value: data.token,
               path: '/',
-              expires: new Date(
-                new Date().getTime() + 60 * 60 * 24 * 1000,
-              ).toDateString(),
+              expires: date,
               secure: true,
             };
             CookieManager.set(BASE_URL, values);
