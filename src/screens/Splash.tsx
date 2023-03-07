@@ -1,6 +1,6 @@
 import React from 'react';
 import {Image, View, StyleSheet} from 'react-native';
-// Comment to push on git
+//splash screen added
 import {ActivityIndicator} from 'react-native-paper';
 import CookieManager, {Cookies} from '@react-native-cookies/cookies';
 import {
@@ -8,34 +8,30 @@ import {
   ParamListBase,
   useNavigation,
 } from '@react-navigation/native';
+import {BASE_URL} from '../helpers/UserLogin';
 
 const SplashScreen = (): JSX.Element => {
   const {reset} = useNavigation<NavigationProp<ParamListBase>>();
 
   function checkLoginStatus() {
     console.log('---Check login Status---');
-    CookieManager.get('https://dev.studio.bankbuddy.me/').then(
-      (data: Cookies): void => {
-        if (JSON.stringify(data).length === 2) {
-          console.log('New user taking to login screen')
-          reset({
-            index: 0,
-            routes: [{name: 'Login'}],
-          });
-        } else {
-          console.log('Already signed in taking to dashboard')
-          reset({
-            index: 0,
-            routes: [{name: 'Dashboard'}],
-          });
-        }
-      },
-    );
+    CookieManager.get(BASE_URL).then((data: Cookies): void => {
+      if (JSON.stringify(data).length === 2) {
+        reset({
+          index: 0,
+          routes: [{name: 'Login'}],
+        });
+      } else {
+        reset({
+          index: 0,
+          routes: [{name: 'Dashboard'}],
+        });
+      }
+    });
   }
   React.useEffect(() => {
-    console.log('Login Check with status success')
     checkLoginStatus();
-  }, []);
+  });
   return (
     <View style={style.body}>
       <Image

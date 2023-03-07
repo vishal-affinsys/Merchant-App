@@ -7,9 +7,11 @@ import {
   StatusBar,
 } from 'react-native';
 import {WebView, WebViewMessageEvent} from 'react-native-webview';
-import CookieManager, {Cookies} from '@react-native-cookies/cookies';
 import {customStyles} from '../constants/Styles';
 import {WebViewErrorEvent} from 'react-native-webview/lib/WebViewTypes';
+import {getCookies} from '../helpers/CookieManager';
+import { Button } from 'react-native-paper';
+import { showLocalNotification } from '../helpers/NotificationHelper';
 
 const DashBoard = (): JSX.Element => {
   const webViewRef = React.useRef<WebView>(null);
@@ -24,11 +26,7 @@ const DashBoard = (): JSX.Element => {
 
   React.useEffect((): (() => void) | undefined => {
     if (Platform.OS === 'android') {
-      CookieManager.get('https://dev.studio.bankbuddy.me/').then(
-        (data: Cookies): void => {
-          console.log(data);
-        },
-      );
+      getCookies();
       BackHandler.addEventListener('hardwareBackPress', onAndroidBackPress);
       return (): void => {
         BackHandler.removeEventListener(
@@ -42,6 +40,19 @@ const DashBoard = (): JSX.Element => {
   function handleOnMessage(event: WebViewMessageEvent): void {
     console.log('Message from webview:', event.nativeEvent);
   }
+
+  const WebAPICode = `
+  const { fetch: originalFetch } = window;
+
+  window.fetch = async (...args) => {
+      let [resource, config ] = args;
+      // request interceptor here
+      const response = await originalFetch(resource, config);
+      await window.ReactNativeWebView.postMessage(JSON.stringify(config));
+      // response interceptor here
+      return response;
+  };
+  `;
 
   return (
     <View style={customStyles.body}>
@@ -60,6 +71,7 @@ const DashBoard = (): JSX.Element => {
         bounces={true}
         renderLoading={(): JSX.Element => <ActivityIndicator />}
         contentMode={'mobile'}
+        injectedJavaScript={WebAPICode}
         allowFileAccess={true}
         scalesPageToFit={true}
         sharedCookiesEnabled={true}
@@ -68,6 +80,7 @@ const DashBoard = (): JSX.Element => {
           console.warn('WebView error: ', nativeEvent);
         }}
       />
+      <Button mode='contained' onPress={()=> showLocalNotification({title: 'Okay this is custom notification', message: 'Custom notificattion body', image: ''})}>Press me</Button>
     </View>
   );
 };
